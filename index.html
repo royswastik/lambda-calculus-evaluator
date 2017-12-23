@@ -17,10 +17,21 @@
             .vue-unloaded{
                 display:none;
             }
+            .notloaded{
+                display: none !important;
+            }
         </style>
     </head>
     <body>
-        <div class="container"  id="lambda" class="vue-unloaded" style="min-height:560px;">
+        <div style="text-align:center; margin-top:80px;" class="my-preloader">
+            <h4>Loading Lambda Evaluator</h4>
+            <div class="spinner">
+                <div class="dot1"></div>
+                <div class="dot2"></div>
+            </div>
+            
+        </div>
+        <div class="container notloaded"  id="lambda" class="vue-unloaded" style="min-height:560px;">
             <br /><br />
             <h2 style="text-align:center;">Lambda Evaluator</h2>
             <br />
@@ -149,7 +160,7 @@
             </div>
         </div>
         <footer>
-            <div class="container" style="margin-top:50px;">
+            <div class="container notloaded" style="margin-top:50px;">
                 <p style="text-align:center;">Copyright © 2017 Swastik Roy</p>
             </div>
         </footer>
@@ -266,7 +277,8 @@
                     }
                 },
                 mounted: function(){
-                    $(".vue-unloaded").removeClass("vue-unloaded");
+                    $(".notloaded").removeClass("notloaded");
+                    $(".my-preloader").addClass("notloaded");
                 },
                 computed: {
                     inputEscaped: function () {
