@@ -1,19 +1,23 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <title>
-            Lambda Calculus Calculator
-        </title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Lambda Calculus Evaluator">
+        <meta name="keywords" content="Lambda Calculus, Lambda, Functional Programming">
+        <meta name="author" content="Swastik Roy">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>Lambda Calculus Calculator</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="dist/scripts/scripts.min.js"></script>
         <link rel="stylesheet" href="dist/css/styles.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <style>
-        .vue-unloaded{
-            display:none;
-        }
-    </style>
+        <style>
+            .vue-unloaded{
+                display:none;
+            }
+        </style>
     </head>
     <body>
         <div class="container"  id="lambda" class="vue-unloaded" style="min-height:560px;">
@@ -39,22 +43,15 @@
                         </div>
                     </div>
                     <br />
-                    <div v-on:click="evaluate" class="ui submit button" id="evl-btn2" style="float:right;">Evaluate</div>
+                    <div v-on:click="evaluate" class="ui submit button" style="float:right;">Evaluate</div>
                
                     <div class="ui dropdown">
                         <div class="text">Select from examples</div>
                         <i class="dropdown icon"></i>
                         <div class="menu">
                             <div class="item" v-for="option in examples" v-on:click="input=option"><span v-html="escapeLambda(option)"></span></div>
-                            
-                            
-                            
-                            
                         </div>
                     </div>
-               
-               
-               
                
                 </div>
 
@@ -93,8 +90,7 @@
                                     </div>
                                     
                             </div>
-                            
-
+               
                         </div>
                     </div>
                 </div>
@@ -161,58 +157,8 @@
 
 
         <script>
-            var color = ["black", "red", "blue", "green", "darkblue", "orange"]
-            function colorParens(inputString, redexIndex){
-                var result = "";
-                var parens = 0;
-                for(var x=0; x<inputString.length; x++){
-                   
-                    var curr = inputString[x];
-                    
-                    //var currGroupIndex = parseInt(groupIndex[x]);
-                    var styles = "";
-                    if(curr == '(')parens++;
-                        if(curr == ')' || curr == '('){
-                            styles += "color:"+color[parens%(color.length)]+";";
-                        }
-                    if(curr == ')')parens--  
-
-                    if (!isNaN(parseInt(redexIndex[x], 10))) {
-                        // Is a number
-                        var currRedex = parseInt(redexIndex[x]);
-                        // styles += "border-bottom: solid 1px "+color[currRedex%(color.length)]+"; padding-bottom: "+(currRedex*10)+"px;";
-                    }
-
-                    result += "<span style=\""+styles+"\">"+curr+"</span>"
-                }
-                result = "<div>"+result+"</div>";
-                // result += redexLines(inputString, redexIndex);
-                return result;
-            }
-
-            function redexLines(inputString, redexIndex){
-                var i = 0;
-                var found = false;
-                var lines = "";
-                while(++i){
-                    var result = "";
-                    found = false;
-                    for(var x = 0; x<inputString.length;x++){
-                        if(!isNaN(parseInt(redexIndex[x])) && parseInt(redexIndex[x]) >=  i){
-                            result += "<span style=\"color:transparent; border-bottom: solid 2px "+color[i%(color.length)]+"; padding-bottom: "+(i*10)+"px;\">"+inputString[x]+"</span>"
-                            found = true;
-                        }else{
-                            result += "<span style=\"color:transparent;\">"+inputString[x]+"</span>";
-                        }
-                    }
-                    if(found == false){
-                        break;
-                    }
-                    result = "<div id=\"line"+i+"\">"+result+"</div>";
-                    lines += result;
-                }
-                return lines;
-            }
+            var color = ["black", "red", "blue", "green", "darkblue", "orange"];
+            
             function isEnterKey(evt)
             {
                 var charCode = (evt.which) ? evt.which : event.keyCode
@@ -223,43 +169,7 @@
             }
 
             $(document).ready(function(){
-
-                $('.ui.dropdown')
-                    .dropdown()
-                    ;
-
-                $("#evl-btn").click(function(){
-                    var input = $("#input").val();
-                    var output = parse_expression(input);
-                    $("#output").html(JSON.stringify(output, null, 2));
-                    var re = new RegExp('L', 'g');
-                    var text = output.text.replace(re, "&#x3BB;");
-                    $("#exp").html(text);
-                    //traverse(output,0,0);
-                    setRedexLevels(output,0);
-                    var result;
-                   
-                    var htmlString = "";
-                    while(true){
-                        result = {redexIndex: output.text};
-                        setRedexIndexes(output,0, result);
-                        var oldString = JSON.stringify(output);
-                        output = NormalOrderEvaluator.evaluate(output);
-                        
-                        colored = colorParens(output.text, result.redexIndex);
-                        text = colored.replace(re, "&#x3BB;");
-
-                        if(oldString == JSON.stringify(output)){
-                            break;
-                        }
-
-                        htmlString += "<br />"+text;
-                        
-                    }
-                    
-                    $("#exp").html(htmlString);
-                    // console.log(colors);
-                });
+                $('.ui.dropdown').dropdown();
             });
 
             var Method = {
