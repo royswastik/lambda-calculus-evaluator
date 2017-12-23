@@ -32,17 +32,17 @@ If the parenthesis are not matched. Also, numbers greater than 20 can not be con
 
 
 ***What are predefined expressions in the compiler?***
-Predefined expressions are 
+Predefined expressions are λ
 - Any natural number between 1 to 20.
-- mult: (Lm.Ln. m ((Lm. Ln. Ls. Lz.m s (n s z)) n) 0)
-- plus: (Lm.Ln.Ls.Lz.m s (n s z))
-- succ: (Ln.Ls.Lz.s (n s z))
-- true: (Lx.Ly.x)
-- false: (Lx.Ly.y)
-- and: (Lb.Lc.b c (Lx.Ly.y))
-- or: (Lb.Lc.b (Lx.Ly.x) c)
-- pair: (Lf.Ls.Lb.b f s)
-- first: (Lp.p (Lx.Ly.x))
-- second: (Lp.p (Lx.Ly.y))
+- mult: (λm.λn. m ((λm. λn. λs. λz.m s (n s z)) n) 0)
+- plus: (λm.λn.λs.λz.m s (n s z))
+- succ: (λn.λs.λz.s (n s z))
+- true: (λx.λy.x)
+- false: (λx.λy.y)
+- and: (λb.λc.b c (λx.λy.y))
+- or: (λb.λc.b (λx.λy.x) c)
+- pair: (λf.λs.λb.b f s)
+- first: (λp.p (λx.λy.x))
+- second: (λp.p (λx.λy.y))
 If you use these keywords as expression, they will be expanded to their respective lambda form.
 
