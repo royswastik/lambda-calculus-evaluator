@@ -1,0 +1,369 @@
+<html>
+    <head>
+        <title>
+            Lambda Calculus Calculator
+        </title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="dist/scripts/scripts.min.js"></script>
+        <link rel="stylesheet" href="dist/css/styles.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        .vue-unloaded{
+            display:none;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="container"  id="lambda" class="vue-unloaded" style="min-height:560px;">
+            <br /><br />
+            <h2 style="text-align:center;">Lambda Evaluator</h2>
+            <br />
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="ui form" style="margin: 0 auto;">
+                        <div class="field">
+                            <h4>Lambda Calculus Expression</h4>
+                            <div class="ui selection dropdown">
+                                <input type="hidden" value="1" id="ev-method">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Normal Order Evaluation</div>
+                                <div class="menu">
+                                    <div class="item" data-value="1">Normal Order Evaluation</div>
+                                    <div class="item" data-value="2">Call By Value</div>
+                                    <div class="item" data-value="3">Call By Name</div>
+                                </div>
+                            </div>
+                            <textarea v-on:keyup.enter="evaluate"  onkeypress="return isEnterKey(event)" v-model="input" id="input"></textarea>
+                        </div>
+                    </div>
+                    <br />
+                    <div v-on:click="evaluate" class="ui submit button" id="evl-btn2" style="float:right;">Evaluate</div>
+               
+                    <div class="ui dropdown">
+                        <div class="text">Select from examples</div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="item" v-for="option in examples" v-on:click="input=option"><span v-html="escapeLambda(option)"></span></div>
+                            
+                            
+                            
+                            
+                        </div>
+                    </div>
+               
+               
+               
+               
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="ui form">
+                        <div class="field">
+                            
+                            <h4>Output</h4>
+                            <div style="border:solid 2px #ccc; border-radius:4px; min-height:200px; padding:10px;">
+                                    <h3><span v-if="input" style="font-size:0.7em">Input Expression:</span> 
+                                        <span v-html="inputEscaped"></span></h3>
+                                    <div class="ui negative message" v-if="error">
+                                        <i class="close icon"></i>
+                                        <div class="header">
+                                            Invalid Input
+                                        </div>
+                                        <p>{{error}}
+                                        </p>
+                                    </div>
+                                    <transition
+                                        name="bounce"
+                                        enter-active-class="bounceInLeft"
+                                        leave-active-class="bounceOutRight"
+                                    >
+                                    
+                                    <p v-if="parenthesized">Parenthesized Output <span v-html="parenthesized"></span></p>
+                                    
+                                    
+                                    </transition>
+                                    <p v-if="outputExpanded">Expanded Output <span v-html="escapeLambda(outputExpanded)"></span></p>
+                                    
+                                    
+                                    <div v-for="(result, index) in results" >
+                                        <h4><strong>Step {{index+1}} :</strong> <span  v-html="result"></span></h4>
+                                        <br />
+                                    </div>
+                                    
+                            </div>
+                            
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-3 col-sm-6">
+                    <br /><br />
+                    <h3 style="text-align:center;">How to use this evaluator</h3>
+                    <div class="ui list">
+                        <a class="item">
+                            <div class="content">
+                                <div class="header">How to write Lambda(&#x3BB;) in input?</div>
+                                <div class="description">Use captial letter 'L' to denote Lambda. Eg. "(Lx.x) x" for "(&#x3BB;x.x) x"</div>
+                            </div>
+                        </a>
+                        <a class="item">
+                            <div class="content">
+                                <div class="header">How to write applications?</div>
+                                <div class="description">For application "T1 T2", there must be a white space between T1 and T2.<br /> Eg. it must be "(Lx.x) (Lx.x)", not "(Lx.x)(Lx.x)"</div>
+                            </div>
+                        </a>
+                        <a class="item">
+                            <div class="content">
+                                <div class="header">How to group expressions?</div>
+                                <div class="description">You can group expressesions with parenthesis. Please do no use curly braces or square brackets</div>
+                            </div>
+                        </a>
+                        <a class="item">
+                            <div class="content">
+                                <div class="header">When does the evualator throw error?</div>
+                                <div class="description">If the parenthesis are not matched. Also, numbers greater than 20 can not be converted to church numeral for now.</div>
+                            </div>
+                        </a>
+                        <a class="item">
+                            <div class="content">
+                                <div class="header">What are reserved expressions?</div>
+                                <div class="description">Reserved expressions are mult, succ, true, false, any natural number between 1 to 20. <br />
+                                If you use these keywords as expression, they will be expanded to their lambda form.</div>
+                            </div>
+                        </a>
+                        
+                    </div>
+                    <br />
+                    <br /><br />
+                </div>
+
+                <div class="col-sm-offset-3 col-sm-6" style="text-align:center;">
+                    <h3>FAQ</h3>
+                    <div class="ui list">
+                        <a class="item" href="https://en.wikipedia.org/wiki/Lambda_calculus" target="_blank">What is a Lambda Calculus?</a>
+                        <a class="item" href="https://www.quora.com/Why-is-it-called-lambda-calculus" target="_blank">Why call it "Lambda"?</a>
+                        <a class="item"  href="https://en.wikipedia.org/wiki/Evaluation_strategy"  target="_blank">What is Normal Order Evaluation? Call By Value? Call By Name?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="container" style="margin-top:50px;">
+                <p style="text-align:center;">Copyright © 2017 Swastik Roy</p>
+            </div>
+        </footer>
+
+
+
+        <script>
+            var color = ["black", "red", "blue", "green", "darkblue", "orange"]
+            function colorParens(inputString, redexIndex){
+                var result = "";
+                var parens = 0;
+                for(var x=0; x<inputString.length; x++){
+                   
+                    var curr = inputString[x];
+                    
+                    //var currGroupIndex = parseInt(groupIndex[x]);
+                    var styles = "";
+                    if(curr == '(')parens++;
+                        if(curr == ')' || curr == '('){
+                            styles += "color:"+color[parens%(color.length)]+";";
+                        }
+                    if(curr == ')')parens--  
+
+                    if (!isNaN(parseInt(redexIndex[x], 10))) {
+                        // Is a number
+                        var currRedex = parseInt(redexIndex[x]);
+                        // styles += "border-bottom: solid 1px "+color[currRedex%(color.length)]+"; padding-bottom: "+(currRedex*10)+"px;";
+                    }
+
+                    result += "<span style=\""+styles+"\">"+curr+"</span>"
+                }
+                result = "<div>"+result+"</div>";
+                // result += redexLines(inputString, redexIndex);
+                return result;
+            }
+
+            function redexLines(inputString, redexIndex){
+                var i = 0;
+                var found = false;
+                var lines = "";
+                while(++i){
+                    var result = "";
+                    found = false;
+                    for(var x = 0; x<inputString.length;x++){
+                        if(!isNaN(parseInt(redexIndex[x])) && parseInt(redexIndex[x]) >=  i){
+                            result += "<span style=\"color:transparent; border-bottom: solid 2px "+color[i%(color.length)]+"; padding-bottom: "+(i*10)+"px;\">"+inputString[x]+"</span>"
+                            found = true;
+                        }else{
+                            result += "<span style=\"color:transparent;\">"+inputString[x]+"</span>";
+                        }
+                    }
+                    if(found == false){
+                        break;
+                    }
+                    result = "<div id=\"line"+i+"\">"+result+"</div>";
+                    lines += result;
+                }
+                return lines;
+            }
+            function isEnterKey(evt)
+            {
+                var charCode = (evt.which) ? evt.which : event.keyCode
+                if (charCode == 13)
+                    return false;
+
+                return true;
+            }
+
+            $(document).ready(function(){
+
+                $('.ui.dropdown')
+                    .dropdown()
+                    ;
+
+                $("#evl-btn").click(function(){
+                    var input = $("#input").val();
+                    var output = parse_expression(input);
+                    $("#output").html(JSON.stringify(output, null, 2));
+                    var re = new RegExp('L', 'g');
+                    var text = output.text.replace(re, "&#x3BB;");
+                    $("#exp").html(text);
+                    //traverse(output,0,0);
+                    setRedexLevels(output,0);
+                    var result;
+                   
+                    var htmlString = "";
+                    while(true){
+                        result = {redexIndex: output.text};
+                        setRedexIndexes(output,0, result);
+                        var oldString = JSON.stringify(output);
+                        output = NormalOrderEvaluator.evaluate(output);
+                        
+                        colored = colorParens(output.text, result.redexIndex);
+                        text = colored.replace(re, "&#x3BB;");
+
+                        if(oldString == JSON.stringify(output)){
+                            break;
+                        }
+
+                        htmlString += "<br />"+text;
+                        
+                    }
+                    
+                    $("#exp").html(htmlString);
+                    // console.log(colors);
+                });
+            });
+
+            var Method = {
+                NORMAL_ORDER_EVALUATION: '1',
+                CALL_BY_VALUE : '2',
+                CALL_BY_NAME: '3'
+            }
+
+            var re = new RegExp('L', 'g');
+            var vm = new Vue({
+                el: '#lambda',
+                data: {
+                    input: '',
+                    selectedMethod: '',
+                    lastName: 'Bar',
+                    results: [],
+                    parenthesized: false,
+                    outputExpanded: null,
+                    error: null,
+                    examples: ["(Lx.x) x", "(Lx.x (Lx.x) x) x", "((Lx. x)(Lx. x x)) ((Lx. x x) (Lx. x x))",
+                    "0 a b", "1 a b", "3 a b", "plus 3 4"]
+                },
+                methods: {
+                    escapeLambda: function(input){
+                        return input.replace(re, "&#x3BB;");
+                    },
+                    precheckInput: function(input){
+                        input = input.replace(/(\r\n|\n|\r)/gm,"");
+                        var pendingParens = 0;
+                        for(var x = 0; x< input.length; x++){
+                            if(input[x] == '(')pendingParens++;
+                            if(input[x] == ')')pendingParens--;
+                        }
+                        if(pendingParens != 0){
+                            this.error ="Error: Unmatched parenthesis";
+                            this.results = [];
+                            this.parenthesized = false;
+                            return {
+                                error: "Error: Unmatched parenthesis"
+                            }
+                        }
+                        this.error = null;
+                        return input;
+                    },
+                    evaluate: function(){
+                        var selectedMethod = $("#ev-method").val();
+                        var Evaluator =NormalOrderEvaluator;
+                        var inputVal = this.precheckInput(this.input);
+                        if(inputVal.error)return;
+                        if(selectedMethod == Method.NORMAL_ORDER_EVALUATION){
+                            Evaluator = NormalOrderEvaluator;
+                        }
+                        else if(selectedMethod == Method.CALL_BY_VALUE){
+                            Evaluator = CallByValueEvaluator;
+                        }
+                        else if(selectedMethod == Method.CALL_BY_NAME){
+                            Evaluator = CallByNameEvaluator;
+                        }
+                        var results = [];
+                        var output = parse_expression(inputVal);
+                        this.parenthesized = output.text.replace(re, "&#x3BB;");
+                        var expandedExp = expandExpression(output);
+                        if(JSON.stringify(expandedExp) != JSON.stringify(output)){
+                            output = expandedExp;
+                            refreshText(output)
+                            this.outputExpanded = output.text;
+                        }
+                        else{
+                            this.outputExpanded = false;
+                        }
+
+                        
+                        setRedexLevels(output,0);
+                        var result;
+                        while(true){
+                            result = {redexIndex: output.text};
+                            setRedexIndexes(output,0, result);
+                            var oldString = JSON.stringify(output);
+                            output = Evaluator.evaluate(output);
+                            
+                            colored = colorParens(output.text, result.redexIndex);
+                            text = colored.replace(re, "&#x3BB;");
+
+                            if(oldString == JSON.stringify(output)){
+                                break;
+                            }
+                            results.push(text);
+                        }
+                        this.results = results;
+                        if(results.length == 0){
+                            this.results.push("Can not be reduced");
+                        }
+                        return false;
+                    }
+                },
+                mounted: function(){
+                    $(".vue-unloaded").removeClass("vue-unloaded");
+                },
+                computed: {
+                    inputEscaped: function () {
+                        return this.input.replace(re, "&#x3BB;");
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
