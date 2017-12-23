@@ -1,0 +1,33 @@
+{
+  "name": "lambda-calculus-evaluator",
+  "version": "1.0.0",
+  "description": "Evaluator tool for lambda calculus expressions. Can be used with evaluation strategies such as normal order evaluation, call by value and call by name.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/royswastik/lambda-calculus-evaluator.git"
+  },
+  "keywords": [
+    "lambda",
+    "calculus",
+    "lambda",
+    "functional",
+    "programming"
+  ],
+  "author": "Swastik Roy",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/royswastik/lambda-calculus-evaluator/issues"
+  },
+  "homepage": "https://github.com/royswastik/lambda-calculus-evaluator#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0"
+  }
+}
