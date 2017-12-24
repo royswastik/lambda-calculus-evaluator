@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
+
 Parser = (function(){
 
     function parseApplication(expString){

@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
+
 
 function isValue(exp){
     if(exp.type == EXPRESSION_TYPE.PARENTHESIS){

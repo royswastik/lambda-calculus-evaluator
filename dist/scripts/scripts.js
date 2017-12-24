@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
+
 BindingUtil = (function(){
     function getFreeVariables(exp){
         var freeVariables = {};
@@ -81,6 +85,10 @@ function redexLines(inputString, redexIndex){
     }
     return lines;
 }
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
+
 
 function isValue(exp){
     if(exp.type == EXPRESSION_TYPE.PARENTHESIS){
@@ -327,6 +335,10 @@ CallByNameEvaluator = BaseEvaluator(function(exp){
 });
 
 
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
+
 EXPRESSION_TYPE = {
     APPLICATION: "application",
     ABSTRACTION: "abstraction",
@@ -393,6 +405,10 @@ var reserved = {
     "first": "(Lp.p (Lx.Ly.x))",
     "second": "(Lp.p (Lx.Ly.y))"
 }
+
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
 
 Parser = (function(){
 
@@ -820,3 +836,6 @@ function getNewName(toBeReplaced, capturableSet, abstractionFreeVariables){
 }
 
 
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */

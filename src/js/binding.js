@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
+
 BindingUtil = (function(){
     function getFreeVariables(exp){
         var freeVariables = {};

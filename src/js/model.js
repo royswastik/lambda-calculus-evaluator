@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
+
 EXPRESSION_TYPE = {
     APPLICATION: "application",
     ABSTRACTION: "abstraction",

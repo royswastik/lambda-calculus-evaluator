@@ -315,3 +315,6 @@ function getNewName(toBeReplaced, capturableSet, abstractionFreeVariables){
 }
 
 
+/*
+ * Copyright (C) Swastik Roy, 2018
+ */
