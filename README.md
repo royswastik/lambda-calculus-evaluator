@@ -31,7 +31,7 @@ You can group expressesions with parenthesis. Please do no use curly braces or s
 If the parenthesis are not matched. Also, numbers greater than 20 can not be converted to church numeral for now.
 
 
-***What are predefined expressions in the compiler?***
+***What are predefined expressions in the evaluator?***
 Predefined expressions are λ
 - Any natural number between 1 to 20.
 - mult: (λm.λn. m ((λm. λn. λs. λz.m s (n s z)) n) 0)
