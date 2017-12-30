@@ -46,3 +46,24 @@ Predefined expressions are λ
 - second: (λp.p (λx.λy.y))
 If you use these keywords as expression, they will be expanded to their respective lambda form.
 
+### Contributing
+
+Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](../../issues/new).
+
+
+### Author
+
+**Swastik Roy**
+
+* [github/royswastik](https://github.com/royswastik)
+* [linkedin/swastikroy](https://www.linkedin.com/in/swastikroy/)
+
+### License
+
+Copyright © 2018, [Swastik Roy](https://github.com/royswastik).
+Released under the [GPL-3.0 License](LICENSE).
+
+***
+
+
+
