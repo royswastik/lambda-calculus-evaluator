@@ -93,7 +93,7 @@ BaseEvaluator = function(evaluateInternal){
         setRedexLevels(container.exp, 0);
         var result = {redexIndex: container.exp.text};
         setRedexIndexes(container.exp, 0 , result);
-        console.log(container.exp.text)
+        console.log(container.exp.text);
         return container.exp;
     }
     return {
@@ -110,12 +110,15 @@ NormalOrderEvaluator = BaseEvaluator(function(exp){
         else if(exp.type == EXPRESSION_TYPE.APPLICATION){
             if(isRedex(exp)){
                 var reduced = reduce(exp);
+                if (exp.text === reduced.exp.text){   //If the reduced is same
+                    return;
+                }
                 if(JSON.stringify(reduced) != JSON.stringify(exp)){ //It is reduced
                     return reduced;
                 }
                 else{   
-                    var result = arguments.callee(exp.exp2);
-                    if(result)exp.exp2 = result;
+                    var result2 = arguments.callee(exp.exp2);
+                    if(result2)exp.exp2 = result2;
                     return;
                 }    
             }
@@ -156,8 +159,10 @@ CallByValueEvaluator = BaseEvaluator(function(exp){
         else if(exp.type == EXPRESSION_TYPE.APPLICATION){
             if(isRedex(exp)){
                 if(isValue(exp.exp2)){
-                    
                     var reduced = reduce(exp);
+                    if (exp.text === reduced.exp.text){   //If the reduced is same
+                        return;
+                    }
                     if(JSON.stringify(reduced) != JSON.stringify(exp)){ //It is reduced
                         return reduced;
                     };
@@ -210,6 +215,9 @@ CallByNameEvaluator = BaseEvaluator(function(exp){
         else if(exp.type == EXPRESSION_TYPE.APPLICATION){
             if(isRedex(exp)){
                 var reduced = reduce(exp);
+                if (exp.text === reduced.exp.text){   //If the reduced is same
+                    return;
+                }
                 if(JSON.stringify(reduced) != JSON.stringify(exp)){ //It is reduced
                     return reduced;
                 }
@@ -226,9 +234,7 @@ CallByNameEvaluator = BaseEvaluator(function(exp){
                 if(oldString == JSON.stringify(exp.exp1)){  //If one is not reduced
                     result = arguments.callee(exp.exp2); if(result)exp.exp2 = result;
                 } //Because only one reduction in each step
-                
-        
-                 
+               
             }
             var expText = (exp.exp1.type == EXPRESSION_TYPE.APPLICATION)?("("+exp.exp1.text+") "+exp.exp2.text):exp.exp1.text+" "+exp.exp2.text;
             exp.text = expText;
